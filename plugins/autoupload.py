@@ -57,7 +57,7 @@ def resize_image(image):
     """
     Resizes an image if its height or width > 1600. Uses lanczos downscaling.
     """
-    if image.size[0] >  or image.size[1] > 1600:
+    if image.size[0] >  1600 or image.size[1] > 1600:
         larger = image.size[0] if image.size[0] > image.size[1] else image.size[1]
         scale = 1600 / larger
         new_dimensions = (int(image.size[0] * scale), int(image.size[1] * scale))
@@ -91,7 +91,7 @@ def get_exif(file_path):
         return
 
 def format_exif(exif_data):
-    exif = exif_data.decode("ascii")
+    exif = exif_data.decode("utf8")
     split_exif = exif.split('\n')
     formatted_exif = ""
     for line in split_exif[1:]:
