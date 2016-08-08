@@ -133,8 +133,21 @@ def unban_member(tg):
     Unbans a member and alerts the chat
     """
     first_name = tg.message['reply_to_message']['from']['first_name']
-    tg.unban_chat_member(tg.message['reply_to_message']['from']['id'])
-    message = "{}'s ban duration has ended. Please add them back.".format(first_name)
+    user_id = tg.message['reply_to_message']['from']['id']
+    username = None
+    tg.unban_chat_member(user_id)
+
+    user_object = tg.get_chat_member()
+    if user_object and user_object['ok']:
+        if 'user_name' in user_object['result']['user']:
+            username = user_object['result']['user']['username']
+    elif 'username' in tg.message['reply_to_message']['from']:
+        username = tg.message['reply_to_message']['from']['username']
+
+    if username:
+        message = "{}'s ({}) ban duration has ended. Please add them back.".format(first_name, username)
+    else:
+        message = "{}'s ban duration has ended. Please add them back.".format(first_name)
     tg.send_message(message, reply_to_message_id=None)
 
 

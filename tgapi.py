@@ -473,8 +473,11 @@ class TelegramApi(object):
                 user_obj = {'id': user_id}
                 user_obj.update(result[0])
                 return {'result': {'status': 'from_db', 'user': user_obj}, 'ok': True}
-        if not chat_id and self.chat_data:
-            chat_id = self.chat_data['chat']['id']
+        if not chat_id:
+            if self.chat_data:
+                chat_id = self.chat_data['chat']['id']
+            else:
+                chat_id = None
         return self.method('getChatMember', check_content=False, user_id=user_id, chat_id=chat_id)
 
     def pm_parameter(self, parameter):
